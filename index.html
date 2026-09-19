@@ -1,0 +1,148 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <meta name="theme-color" content="#15100c" />
+  <meta name="description" content="A community-built WoW Forever leveling route planner and quest checklist." />
+  <link rel="manifest" href="./manifest.webmanifest" />
+  <link rel="icon" href="./icon.svg" type="image/svg+xml" />
+  <link rel="stylesheet" href="./styles.css" />
+  <title>Forever Path — WoW Forever Leveling Guide</title>
+</head>
+<body>
+  <header class="site-header">
+    <div>
+      <p class="eyebrow">WORLD OF WARCRAFT: FOREVER</p>
+      <h1>Forever Path</h1>
+      <p class="subtitle">Resume the fastest leveling route from wherever your character is.</p>
+    </div>
+    <div class="header-actions">
+      <button id="exportBtn" class="button secondary">Export Progress</button>
+      <label class="button secondary file-button">Import Progress<input id="importInput" type="file" accept="application/json" /></label>
+      <button id="resetBtn" class="button danger">Reset</button>
+    </div>
+  </header>
+
+  <main class="layout">
+    <aside class="panel character-panel">
+      <div class="panel-title-row">
+        <h2>Character</h2>
+        <span id="dataBadge" class="badge verified">Forever DB verified</span>
+      </div>
+
+      <label>Faction
+        <select id="faction">
+          <option value="Horde">Horde</option>
+          <option value="Alliance">Alliance</option>
+        </select>
+      </label>
+
+      <label>Race
+        <select id="race"></select>
+      </label>
+
+      <label>Class
+        <select id="className"></select>
+      </label>
+
+      <div class="two-col">
+        <label>Level
+          <input id="level" type="number" min="1" max="60" value="1" />
+        </label>
+        <label>Current zone
+          <select id="zone"></select>
+        </label>
+      </div>
+
+      <label>Current location / notes
+        <input id="locationNotes" type="text" placeholder="e.g. Razor Hill inn" />
+      </label>
+
+      <label class="checkbox-row">
+        <input id="includeDungeons" type="checkbox" checked />
+        Include efficient dungeon steps
+      </label>
+
+      <label class="checkbox-row">
+        <input id="includeGroupQuests" type="checkbox" checked />
+        Include efficient group/elite quests
+      </label>
+
+      <button id="buildRouteBtn" class="button primary full">Build / Resume Route</button>
+      <button id="startHereBtn" class="button secondary full">Start route from my current level & zone</button>
+
+      <p id="dataNote" class="data-note">v0.2 covers the Orc/Horde 1–20 route. Quest records are checked against Forever build 1.60.1; route timing is still beta.</p>
+
+      <div class="stats-grid">
+        <div><strong id="completedCount">0</strong><span>steps done</span></div>
+        <div><strong id="remainingCount">0</strong><span>remaining</span></div>
+        <div><strong id="routeXp">0</strong><span>quest XP left</span></div>
+        <div><strong id="routeMinutes">0</strong><span>est. min</span></div>
+      </div>
+    </aside>
+
+    <section class="content-column">
+      <section class="panel next-panel">
+        <div class="panel-title-row">
+          <div>
+            <p class="eyebrow">DO THIS NEXT</p>
+            <h2 id="nextTitle">Build your route</h2>
+          </div>
+          <span id="nextType" class="badge">—</span>
+        </div>
+        <p id="nextInstruction" class="next-instruction">Choose your character state, then build the route.</p>
+        <div id="nextMeta" class="meta-row"></div>
+        <details id="nextWhy" class="why-details">
+          <summary>Why this step?</summary>
+          <p></p>
+        </details>
+        <div class="next-actions">
+          <button id="completeNextBtn" class="button primary" disabled>Complete step</button>
+          <button id="skipNextBtn" class="button secondary" disabled>Skip step</button>
+        </div>
+      </section>
+
+      <section class="panel">
+        <div class="panel-title-row route-tools">
+          <div>
+            <p class="eyebrow">ACTIVE ROUTE</p>
+            <h2>Step-by-step checklist</h2>
+          </div>
+          <div class="filters">
+            <input id="search" type="search" placeholder="Search steps or quests" />
+            <select id="stepFilter">
+              <option value="all">All steps</option>
+              <option value="remaining">Remaining</option>
+              <option value="complete">Completed</option>
+              <option value="quest">Quest only</option>
+              <option value="travel">Travel only</option>
+              <option value="dungeon">Dungeon route</option>
+            </select>
+          </div>
+        </div>
+        <div id="routeMessage" class="empty-state">No route loaded yet.</div>
+        <ol id="routeList" class="route-list"></ol>
+      </section>
+
+      <section class="panel">
+        <div class="panel-title-row">
+          <div>
+            <p class="eyebrow">ROUTE LOGIC</p>
+            <h2>Why this route?</h2>
+          </div>
+        </div>
+        <div id="routeReason" class="reason-box">
+          The resolver will choose the nearest eligible route segment that fits your faction, level, zone, prerequisites, and preferences.
+        </div>
+      </section>
+    </section>
+  </main>
+
+  <footer>
+    <strong>Forever Path</strong> is a fan-made planning tool and is not affiliated with Blizzard Entertainment. v0.2 quest availability, levels, and XP were checked against the Forever database; route order still requires timed in-game validation.
+  </footer>
+
+  <script type="module" src="./src/app.js"></script>
+</body>
+</html>
