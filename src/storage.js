@@ -14,7 +14,8 @@ export const defaultState = {
   completed: {},
   skipped: {},
   activeRouteIds: [],
-  routeStartedFromHereAt: null
+  routeStartedFromHereAt: null,
+  gameSync: null
 };
 
 export function loadState() {

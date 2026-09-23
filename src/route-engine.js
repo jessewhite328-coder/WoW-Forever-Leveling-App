@@ -64,6 +64,14 @@ function stepAllowed(step, profile) {
 }
 
 export function buildRoute(routePacks, profile, state, { startHere = false } = {}) {
+  if (profile.level > 20) {
+    return {
+      steps: [],
+      selectedSegments: [],
+      entryStep: null,
+      reason: `Crouton's profile is synced at level ${profile.level}. The application is limited to levels 1–30, but verified Forever route instructions currently end at level 20. Your status is saved and the 21–30 pack can attach here without restarting progress.`
+    };
+  }
   const compatible = selectSegments(routePacks, profile);
   const ordered = compatible.filter(segment => profile.includeDungeons || !segment.flags?.includes("dungeon"));
   if (!ordered.length) {
