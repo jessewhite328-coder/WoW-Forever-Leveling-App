@@ -127,17 +127,18 @@ export const QUESTS = [
 ];
 
 export const QUEST_BY_ID = new Map(QUESTS.map(record => [record.id, record]));
+export const SYNC_QUEST_IDS = QUESTS.map(record => record.id);
 
 export const DATASET = {
   id: "horde-orc-1-20-2026-09-18",
   build: BUILD,
   checkedAt: CHECKED_AT,
   questCount: QUESTS.length,
-  coverage: "Orc/Horde fastest-route candidate, levels 1–20",
+  coverage: "Orc Warrior 1–30 application; verified route data currently covers levels 1–20",
   verificationStatus: "FOREVER_DB_VERIFIED_ROUTE_BETA",
   limitations: [
     "Quest availability, level requirements, and XP were checked against the Forever database.",
     "Route order is a speed-route candidate and still needs timed in-game validation.",
-    "Exact giver, objective, and turn-in coordinates are planned for v0.3."
+    "v0.4 waypoint coordinates are route-beta navigation anchors and require live playtest correction."
   ]
 };

@@ -171,3 +171,5 @@ export const ROUTE_PACKS = [
     ]
   }
 ];
+
+export const SYNC_ROUTE_STEP_IDS = ROUTE_PACKS.flatMap(pack => pack.steps.map(routeStep => routeStep.id));

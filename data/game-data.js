@@ -1,8 +1,9 @@
 export const GAME_DATA = {
-  dataVersion: "0.2-horde-1-20",
+  dataVersion: "0.4-orc-warrior-tomtom-route",
   verificationStatus: "FOREVER_DB_VERIFIED_ROUTE_BETA",
   build: "1.60.1",
   checkedAt: "2026-09-18",
+  supportedProfile: { faction: "Horde", race: "Orc", className: "Warrior", minLevel: 1, maxLevel: 30 },
   races: {
     Horde: ["Orc", "Troll", "Tauren", "Undead", "Skyborne"],
     Alliance: ["Human", "Dwarf", "Night Elf", "Gnome", "Skyborne"]
