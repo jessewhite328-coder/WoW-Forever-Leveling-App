@@ -107,3 +107,45 @@ Segments make "pick up anywhere" possible. A segment should have multiple valid 
 - flight paths known
 - profession detour toggles
 - route build/version
+
+## Sync envelope
+
+Game status uses a compact, semicolon-delimited `FP1` envelope. Completed and active quests are fixed-registry bitsets, encoded as hexadecimal. Both the addon and `data/quest-database.js` must keep the registry in exactly the same order.
+
+```text
+FP1;R=1;L=18;Z=The%20Barrens;S=Crossroads;M=10;X=52.1;Y=30.4;H=Crossroads;C=...;A=...;K=...
+```
+
+`K` is the uppercase eight-digit Adler-32 checksum of everything before `;K=`. The web app previews and validates the envelope before the user explicitly applies it.
+
+Web-to-game settings use the `FPW1` envelope:
+
+```text
+FPW1;D=1;G=1;N=h-18-001;T=Next%20instruction;K=...
+```
+
+The sync merge is additive: verified in-game completion can complete matching route steps, but an import never removes an existing completed or skipped step.
+
+v0.4 appends route-state fields to both backward-compatible envelopes:
+
+- `N`: current route-step ID
+- `P`: completed route-step bitset
+- `Q`: skipped route-step bitset
+
+The route bitsets use the fixed step order exported by `data/route-packs.js` and mirrored in `ForeverPathSync/RouteData.lua`. The registries must remain byte-for-byte ordered together.
+
+## Navigation anchor
+
+Each bundled addon step contains a WoW UI map ID and normalized percent coordinates:
+
+```lua
+{
+  id = "bar-060",
+  mapID = 1413,
+  x = 62.7,
+  y = 36.2,
+  coordinateStatus = "ROUTE_BETA"
+}
+```
+
+An anchor is the primary destination for an aggregated route instruction. It is not a claim that every linked NPC, mob, or object occupies that single coordinate.

@@ -1,95 +1,87 @@
 # Forever Path
 
-A GitHub Pages-friendly, mobile-first WoW: Forever leveling route planner.
+A mobile-first WoW: Forever route companion for **Crouton, an Orc Warrior, levels 1–30**. The GitHub Pages web app and `ForeverPathSync` addon exchange character and route status without an account or server. v0.4 adds full 1–20 route navigation through TomTom.
 
-## v0.2 data coverage
+## v0.4 scope
 
-This release replaces the demo Horde data with the first real production slice:
+- locked Horde / Orc / Warrior profile with level input and status import through 30
+- current route pack covers Durotar, Orgrimmar/Ragefire Chasm, and the Barrens through level 20
+- the addon contains the same ordered 53-step route as the website
+- TomTom Crazy Arrow, minimap pin, and world-map pin for the active step
+- automatic advancement when the addon can safely verify acceptance, objective completion, or turn-in state
+- manual **Back**, **Next**, **Skip**, **Arrow**, and **Clear** buttons plus matching slash commands
+- bidirectional completed/skipped route-state sync in the compact `FP1` and `FPW1` codes
+- dungeon and group preferences are applied inside the addon route
+- route coordinates are beta navigation anchors and should be corrected during live playtesting
 
-- Orc/Troll Durotar opening through level 12
-- Crossroads, Ratchet, oasis, western and southern Barrens routes through level 20
-- optional five-quest Ragefire Chasm window
-- 87 structured quest records checked against the WoW Forever database for build 1.60.1 on 2026-09-18
-- route checkpoints that use level, zone, and typed location notes such as `Crossroads`, `Ratchet`, or `Camp Taurajo`
+Levels 21–30 can be imported and retained, but the app deliberately stops route instructions above 20 until that route pack is verified.
 
-Quest availability, required level, quest level, and XP are database-verified. The route order is a speed-route candidate and still needs timed in-game validation. Exact NPC/objective/turn-in coordinates are the v0.3 milestone.
+## Install and navigate
 
-## What this starter already does
+1. Install a WoW Forever-compatible TomTom build.
+2. Copy `ForeverPathSync` into the active client's `Interface/AddOns` directory.
+3. Restart WoW and enable both addons.
+4. On the website, open **Sync with WoW** and copy the Web → game code.
+5. In game, paste `/fp import ` followed by the `FPW1;...` code.
+6. TomTom points to the imported current step.
 
-- character profile: faction, race, class, level, current zone
-- "Build / Resume Route" from saved progress
-- "Start from my current level & zone" resolver
-- step-by-step checklist
-- next-step card
-- persistent progress using localStorage
-- skip / complete controls
-- filters and search
+Use `/fp next` for travel, training, maintenance, or any step that the quest log cannot prove. Quest-log events automatically advance qualifying quest steps.
+
+```text
+/fp status     Show the current instruction
+/fp next       Complete this step and advance
+/fp back       Return to the previous enabled step
+/fp skip       Skip this step and advance
+/fp arrow      Restore the current waypoint
+/fp clear      Remove only the Forever Path waypoint
+/fp export     Export game and addon status to the website
+/fp import …   Import web route state and preferences
+```
+
+ForeverPathSync removes only the TomTom waypoint it created. It does not clear personal TomTom markers.
+
+See [SYNC_GUIDE.md](SYNC_GUIDE.md) for merge rules, automatic-advancement details, and troubleshooting.
+
+## Web app features
+
+- build or resume the route from imported/current status
+- step checklist with complete and skip controls
+- search and step-type filters
 - estimated remaining XP and time
-- dungeon preference toggle
-- export/import progress JSON
+- optional Ragefire Chasm and group routing
+- local progress storage plus JSON backup/restore
 - installable PWA shell and offline cache
 - no framework or build process required
 
-## Verification labels
+## Data confidence
 
-- `DB_VERIFIED`: the quest record appears in the Forever database.
-- `PAGE_VERIFIED`: the individual quest page, giver/objective, level, and XP were checked.
-- `ROUTE_BETA`: the ordering is ready for playtesting but is not yet a timed world-record route.
+- `DB_VERIFIED`: quest record verified in the Forever database.
+- `PAGE_VERIFIED`: individual quest page details checked.
+- `ROUTE_BETA`: route order and navigation anchor require timed in-game validation.
 
-Alliance and non-Durotar Horde starters intentionally show an unavailable message instead of demo instructions.
+A waypoint is the representative destination for an aggregated route step. Some steps contain several nearby NPCs or objectives, so `/fp next` remains the final control when one arrow cannot represent every sub-objective.
 
 ## Publish on GitHub Pages
 
-1. Create a repository, for example `wow-forever-leveling-guide`.
-2. Upload the contents of this folder to the repository root.
-3. In GitHub open **Settings → Pages**.
-4. Under **Build and deployment**, choose **Deploy from a branch**.
-5. Select the `main` branch and `/ (root)` folder, then Save.
-6. GitHub will show the public Pages URL after deployment.
+1. Upload the contents of this directory to the repository root, preserving `data`, `src`, and `ForeverPathSync` as folders.
+2. In GitHub open **Settings → Pages**.
+3. Choose **Deploy from a branch**, then select `main` and `/ (root)`.
+4. After deployment, reload the site once online so the v0.4 offline cache replaces v0.3.
 
-Because all asset paths are relative, this project works correctly from a GitHub Pages repository subdirectory.
-
-## Recommended development roadmap
-
-### Phase 1 — engine + levels 1–20
-- replace demo route packs with verified beta data — Horde Orc/Troll slice complete
-- support Horde and Alliance entry points
-- add exact quest giver / objective / turn-in coordinates
-- add prerequisite chain logic
-- add trainer, flight path, hearth, vendor, and dungeon steps
-- validate routes with timed playthroughs
-
-## Playtest workflow
-
-1. Enter your actual level, zone, and a recognizable location such as `Razor Hill`.
-2. Select **Start route from my current level & zone**.
-3. Complete or skip each instruction while playing.
-4. Export progress before switching devices.
-5. Record any incorrect quest availability, route detour, or level gap for the next data revision.
-
-### Phase 2 — levels 21–30 beta
-- add new beta zones/content as the cap rises
-- compare alternate zone paths by measured XP/hour
-- add route branching when a player arrives over/under-level
-
-### Phase 3 — launch 1–60
-- complete the quest database
-- route through new Forever zones such as Riverglades and Shen'Dralas where efficient
-- add level 60 transition / pre-bis preparation as an optional endpoint
-
-### Phase 4 — smart optimizer
-- weighted graph of travel + quest dependencies
-- live route recalculation
-- per-class speed modifiers
-- route variants: pure speed, dungeon-heavy, solo-only, completionist
-- crowdsourced anonymous timing data
+The addon folder can remain in the GitHub repository; the website does not load it.
 
 ## Local testing
-
-Do not open `index.html` directly because browser module rules can block local files. Run a tiny local web server instead:
 
 ```bash
 python -m http.server 8000
 ```
 
 Then visit `http://localhost:8000`.
+
+## Roadmap
+
+- playtest and correct all 53 navigation anchors
+- split multi-location route steps into finer waypoint stages
+- validate and add the Orc Warrior level 21–30 route pack
+- add trainer, flight path, hearth, and vendor state detection
+- add an optional QR presentation layer over the compact status codes

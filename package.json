@@ -1,0 +1,9 @@
+{
+  "name": "forever-path",
+  "private": true,
+  "version": "0.4.0",
+  "type": "module",
+  "scripts": {
+    "check": "node --check src/app.js && node --check src/sync.js && node --check src/storage.js && node --check src/route-engine.js"
+  }
+}
